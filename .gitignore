@@ -1,0 +1,39 @@
+# --- General ---
+.DS_Store
+Thumbs.db
+*.log
+
+# --- Angular / Node ---
+node_modules/
+dist/
+.angular/
+.sass-cache/
+connect.lock
+coverage/
+lib/
+npm-debug.log
+yarn-error.log
+testem.log
+/reports
+# Archivos de entorno locales (opcional, ajusta según necesidad)
+src/environments/environment.development.ts
+
+# --- .NET / Visual Studio ---
+[Bb]in/
+[Oo]bj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+TestResults/
+
+# --- Docker ---
+docker-compose.build.yml
+docker-compose.override.yml

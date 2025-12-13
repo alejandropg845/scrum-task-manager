@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprint summary</title>
+</head>
+<body>
+    
+    <style>
+        html {
+            font-size: 62.5%;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .sprints-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .tasks-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            justify-content: center;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .task-container {
+            background-color: rgb(240, 240, 240);
+            padding: .5rem 1rem;
+            width: 34rem;
+            border-radius: 1rem;
+        }
+
+        .sprint-name {
+            gap: 1rem;
+            font-size: 2rem;
+            font-weight: 500;
+            margin-top: 6rem;            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sprint-name span {
+            padding: .2rem 1rem;
+            border-radius: 1rem;
+        }
+
+        .task-title {
+            font-size: 1.4rem;
+            font-weight: 500;        
+        }
+
+        .task-items-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .task-item-content {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: .1rem solid black;
+            gap: 1rem;
+        }
+
+        .task-item-title {
+            font-size: 1.2rem;
+            max-width: 22rem;
+        }
+
+        .task-item-responsable {
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background-color: rgb(119, 255, 119);
+            text-transform: uppercase;
+        }
+
+        .status-not-completed {
+            background-color: rgb(255, 110, 110);
+            text-transform: uppercase;
+        }
+
+        .task-item-not-completed {
+            background-color: rgb(255, 208, 208);
+        }
+
+        .completed-status-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .task-status {
+            padding: .5rem 1rem;
+            font-size: 1.5rem;
+            font-weight: bold !;
+            border-radius: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+    </style>

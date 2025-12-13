@@ -1,0 +1,55 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  name: Default
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  outputFolder: '$(build.artifactStagingDirectory)'
+  services: 'Users Tokens Authentication Tasks TaskItems Sprints Groups GroupsRoles Chats'
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="${outputFolder}\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+# Publicar cada API
+- ${{ each service in split(variables['services'], ' ') }}:
+  - script: 'dotnet publish TaskManager.${{service}}/TaskManager.${{service}}.csproj --configuration $(buildConfiguration) --output $(outputFolder)/${{service}}'
+    displayName: 'Publish TaskManager.${{service}}'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(outputFolder)/${{service}}'
+      ArtifactName: '${{service}}'
+      publishLocation: 'Container'
+
+# Artefacto a Web App
+- ${{ each service in split(variables['services'], ' ') }}:
+  - task: AzureRmWebAppDeployment@5
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: 'AlejandroPG_Subcription(c8f06ca5-8bf4-46f3-be20-5942e3c036a2)'
+      appType: 'webApp'
+      WebAppName: '${{service}}ALEX845API'
+      packageForLinux: '$(outputFolder)/${{service}}'

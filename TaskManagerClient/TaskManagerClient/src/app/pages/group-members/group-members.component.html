@@ -1,0 +1,170 @@
+<div class="group-members-container">
+
+    <button type="button" class="download-sprints-summary" (click)="downloadSprintsSummary()" 
+    *ngIf="userService.groupRole === 'product owner' || userService.groupRole === 'scrum master'">
+        <span *ngIf="!isSpanish">Download sprints summary</span>
+        <span *ngIf="isSpanish">Descargar resumen de sprints</span>
+    </button>
+
+    <h3>
+        <span *ngIf="!isSpanish">Group section</span>
+        <span *ngIf="isSpanish">Sección Grupo</span>
+    </h3>
+
+    <div class="group-members-content">
+
+        <div class="group-actions-container">
+
+            <p *ngIf="userService.groupName" class="group-code">
+                <span *ngIf="!isSpanish">Group code: </span>
+                <span *ngIf="isSpanish">Código de grupo: </span>    
+                <span class="code">{{userService.groupName}}</span>
+            </p>
+
+            <div *ngIf="!userService.groupName" class="group-actions-content">
+                <button (click)="createGroup = !createGroup" class="button-style color-white"><i class="fa-solid fa-repeat"></i> Switch</button>
+                <input maxlength="15" type="text" #joinGroupName [placeholder]="!isSpanish ? 'Join group' : 'Unirse a grupo'" *ngIf="!createGroup">
+                <input maxlength="10" type="text" #createGroupName [placeholder]="!isSpanish ? 'Create group' : 'Crear grupo'" *ngIf="createGroup">
+                <button class="button-style scrum-button" (click)="isScrum = !isScrum" *ngIf="createGroup" [ngClass]="{
+                    'bg-gray':!isScrum, 'bg-green':isScrum
+                }">Scrum</button>
+            </div>
+
+            <button *ngIf="!userService.groupName" class="button-style done-button" (click)="onGroupAction()">
+                <span *ngIf="!isSpanish">Done</span>
+                <span *ngIf="isSpanish">Hecho</span>
+            </button>
+
+            <button *ngIf="userService.groupName" class="button-style leave-button" (click)="onLeaveGroup()">
+                <span *ngIf="!isSpanish">Leave group</span>
+                <span *ngIf="isSpanish">Salir del grupo</span>
+            </button>
+            <button *ngIf="userService.groupName && userService.isGroupOwner" class="button-style remove-button" (click)="onRemoveGroup()">
+                <span *ngIf="!isSpanish">Remove Group</span>
+                <span *ngIf="isSpanish">Eliminar grupo</span>
+            </button>
+
+        </div>
+
+        <div class="allow-add-tasks-container" *ngIf="userService.groupName && userService.isGroupOwner">
+            <p>
+                <span *ngIf="!isSpanish">Allow adding tasks</span>
+                <span *ngIf="isSpanish">Permitir agregar tareas</span>
+            </p>
+            <input [checked]="userService.isAllowed" type="checkbox" (focus)="isAllowedPreviousValue = inputElement.checked" hidden id="tasks-checkbox" #inputElement (change)="onSetAddingTasksAllowed(inputElement)">
+            <label for="tasks-checkbox"></label>
+        </div>
+
+        <h4 class="group-members-h4" *ngIf="userService.groupName"> 
+            <span *ngIf="!isSpanish">Group members</span> 
+            <span *ngIf="isSpanish">Miembros del grupo</span> 
+        </h4>
+
+        <ul class="members-list" *ngIf="userService.groupName">
+            @for (member of groupMembers; track member; let i = $index) {
+            <li [style.background-color]="i % 2 === 0 ? 'var(--custom-gray)':'white'">
+                <p>{{member.username | isYou}}</p>
+                <select (focus)="previousRoleValue = selectElement.value"
+                #selectElement [value]="member.groupRole" 
+                (change)="onChooseRole(selectElement, member.username)" 
+                *ngIf="userService.isScrum">
+                    <option value="none">{{isSpanish?"Ninguno":"None"}}</option>
+                    <option value="developer">
+                        <span *ngIf="!isSpanish">Developer</span>
+                        <span *ngIf="isSpanish">Desarrollador/a</span>
+                    </option>
+                    <option value="scrum master">Scrum Master</option>
+                    <option value="product owner">Product Owner</option>
+                </select>
+            </li>
+            }
+        </ul>
+
+
+    </div>
+
+    <div *ngIf="userService.groupName 
+    && userService.isScrum 
+    && userService.groupRole === 'product owner' 
+    && userService.status !== 'begun'" 
+    class="sprint-options-container">
+
+        <h4>
+            <span *ngIf="!isSpanish">Sprint options</span>
+            <span *ngIf="isSpanish">Opciones de Sprint</span>
+        </h4>
+
+        <div class="sprint-options-content">
+            
+            <div class="sprint-duration">
+                <p>
+                    <span *ngIf="!isSpanish">Sprint duration:</span>
+                    <span *ngIf="isSpanish">Duración del Sprint:</span>
+                </p>
+                <select #selectReference (change)="weeks = selectReference.value">
+                    <option value="">
+                        <span *ngIf="!isSpanish">Not set</span>
+                        <span *ngIf="isSpanish">Sin aplicar</span>
+                    </option>
+                    <option value="2">2 <span *ngIf="!isSpanish">weeks</span><span *ngIf="isSpanish">semanas</span></option>
+                    <option value="3">3 <span *ngIf="!isSpanish">weeks</span><span *ngIf="isSpanish">semanas</span></option>
+                    <option value="4">4 <span *ngIf="!isSpanish">weeks</span><span *ngIf="isSpanish">semanas</span></option>
+                </select>
+            </div>
+
+            <div class="sprint-name-container">
+                <p>
+                    <span *ngIf="!isSpanish">Sprint name (optional)</span>
+                    <span *ngIf="isSpanish">Nombre del Sprint (opcional)</span>
+                </p>
+                <input type="text" #sprintName placeholder="Sprint name" maxlength="100">
+            </div>
+        </div>
+
+        <div class="selected-tasks-for-sprint-container">
+
+            <h4>
+                <span *ngIf="!isSpanish">Selected tasks for sprint:</span>
+                <span *ngIf="isSpanish">Tareas para el Sprint:</span>
+                <span> {{selectedTasksForSprint.length}}</span>
+            </h4>
+
+            <div class="selected-tasks-for-sprint-content">
+
+                @for (selectedTask of selectedTasksForSprint; track $index) {
+
+                <div class="selected-task-for-sprint">
+
+                    <p class="select-task-for-sprint-title" [ngClass]="{
+                        'low-priority': selectedTask.priority === 1,
+                        'medium-priority': selectedTask.priority === 2,
+                        'high-priority': selectedTask.priority === 3
+                    }">{{selectedTask.title}}</p>
+                    <ul class="selected-task-items-list">
+                        @for (taskItem of selectedTask.taskItems; track $index) {
+                            <li [ngClass]="{
+                                'task-none-priority': taskItem.priority === 0,
+                                'task-low-priority': taskItem.priority === 1,
+                                'task-medium-priority': taskItem.priority === 2,
+                                'task-high-priority': taskItem.priority === 3
+                            }">
+                                <p>{{taskItem.content}}</p>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+        <button class="button-style begin-sprint-button" (click)="beginSprint()">
+            <span *ngIf="!isSpanish">Begin sprint&nbsp;</span>
+            <span *ngIf="isSpanish">Comenzar sprint&nbsp;</span> 
+            #{{sprintService.sprintNumber}}
+        </button>
+    </div>
+
+</div>

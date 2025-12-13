@@ -1,0 +1,71 @@
+<div class="chat-container container">
+
+    <h3>
+        <span *ngIf="!isSpanish">Group chat</span>
+        <span *ngIf="isSpanish">Chat del grupo</span>
+    </h3>
+
+    <div class="messages-container container">
+
+        <div class="messages-content" #messagesContent (scroll)="onScrollTop()">
+
+            <p *ngIf="chatMessages.length === 0" class="no-messages">
+                <span *ngIf="!isSpanish">No messages have been sent for now</span>
+                <span *ngIf="isSpanish">No se han enviado mensajes</span>
+            </p>
+
+            @for (messageDate of chatMessages; track $index) {
+            <p class="messages-date">{{messageDate.messagesFullDateInfo | date}}</p>
+            <p class="messages-date" *ngIf="chatMessages.length === 0">
+                <span *ngIf="!isSpanish">No messages for now</span>
+                <span *ngIf="isSpanish">No hay mensajes por ahora</span>
+            </p>
+
+                @for (message of messageDate.messages; track $index) {
+                <div class="message-content"
+                [ngClass]="{
+                    'margin-left-auto': isUser(message.sender),
+                    'margin-right-auto': !isUser(message.sender)
+                }"
+                [@fadeIn]
+                >
+                    <p class="message-time" [ngClass]="{
+                        'position-left': !isUser(message.sender),
+                        'position-right': isUser(message.sender)
+                    }">{{"0000-01-01T"+ message.messageTime | date:'HH:mm'}}</p>
+
+                    <div class="user-avatar" [style.background-color]="message.avatarBgColor">{{message.sender | avatar | uppercase}}</div>
+                    
+                    <div class="sender-info">
+                        <p>{{message.sender}}</p>
+                        <p>{{message.content}}</p>
+                    </div>
+
+                </div>
+                }
+                
+            }
+            
+        </div>
+
+    </div>
+
+    <div class="chat-interface-container container">
+
+        <div class="chat-interface-content">
+            <textarea placeholder="Your message here"
+            autocomplete="off" #message
+            (keydown.enter)="onSendMessage(message)"
+            ></textarea>
+            
+            <button (click)="onSendMessage(message)">
+                <span *ngIf="!isSpanish">Send</span>
+                <span *ngIf="isSpanish">Enviar</span>
+            </button>
+        </div>
+
+    </div>
+
+
+
+</div>

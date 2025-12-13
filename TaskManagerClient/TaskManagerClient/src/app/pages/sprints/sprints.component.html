@@ -1,0 +1,162 @@
+<button class="show-sprints-button" (click)="showSprints = !showSprints" *ngIf="userService.groupName && userService.isScrum">
+    <span *ngIf="!showSprints"><i class="fa-solid fa-arrow-left"></i></span>
+    <span *ngIf="showSprints"><i class="fa-solid fa-arrow-right"></i></span>
+</button>
+
+<div class="sprints-container" *ngIf="showSprints && userService.isScrum" [@slideUp]>
+    
+    <p class="no-sprints-available" *ngIf="groupSprints.length === 0">This group haven't begun any sprint yet</p>
+
+    @for (sprint of groupSprints; track $index) {
+        
+        
+        <h2 *ngIf="!sprint.sprintName">Sprint # {{sprint.sprintNumber}} 
+            <span *ngIf="!isSprintNotCompleted(sprint.tasks)">
+                <span *ngIf="!isSpanish">Completed</span>
+                <span *ngIf="isSpanish">Completado</span>
+            </span>
+            <span *ngIf="isSprintNotCompleted(sprint.tasks)">
+                <span *ngIf="!isSpanish">Not completed</span>
+                <span *ngIf="isSpanish">No completado</span>
+            </span> 
+        </h2>
+
+        <h2 *ngIf="sprint.sprintName">{{sprint.sprintName}} (Sprint # {{sprint.sprintNumber}}) 
+            <span *ngIf="!isSprintNotCompleted(sprint.tasks)">
+                <span *ngIf="!isSpanish">Completed</span>
+                <span *ngIf="isSpanish">Completado</span>
+            </span>
+            <span *ngIf="isSprintNotCompleted(sprint.tasks)">
+                <span *ngIf="!isSpanish">Not completed</span>
+                <span *ngIf="isSpanish">No completado</span>
+            </span> 
+        </h2>
+
+        <div class="sprint-content">
+
+
+            @for (task of sprint.tasks; track task; let i = $index) {
+                
+            <div class="task-container" [ngClass]="{
+                'task-high-priority': task.priority === 3,
+                'task-medium-priority': task.priority === 2,
+                'task-low-priority' : task.priority === 1,
+                'task-none-priority': task.priority === 0
+            }"> <!--Task container-->
+                <div class="header-task-info"> <!--Task info-->
+                    
+                    <p *ngIf="task.status === 'in progress' && task.sprintStatus !== 'finished'" class="task-expiration"><span class="spinning-clock"></span>
+                        <span *ngIf="!isSpanish">Sprint in progress</span>
+                        <span *ngIf="isSpanish">Sprint en progreso</span>
+                    </p>
+
+                    <p *ngIf="task.sprintStatus === 'finished' && task.status === 'in progress'" class="task-expiration not-completed">
+                        <span *ngIf="!isSpanish">Not completed</span>
+                        <span *ngIf="isSpanish">No completado</span>
+                    </p>
+
+                    <p *ngIf="task.status === 'completed'" class="task-completed"><i class="fa fa-solid fa-check"></i>
+                        <span *ngIf="!isSpanish">Completed</span>
+                        <span *ngIf="isSpanish">Completado</span>
+                    </p>
+                    
+                    <p>
+                        <span *ngIf="!isSpanish">Created on</span> 
+                        <span *ngIf="isSpanish">Creado en</span> 
+                        <span>{{task.createdOn | date}}</span> by <span>{{task.username | titlecase}}</span>
+                    </p>
+
+                </div>
+
+                <p class="task-title">{{task.title}}</p>
+
+                <!-- Listado de subtareas -->
+            <ul class="ul-container" #ulContainer>
+                
+                @for (taskItem of task.taskItems; track taskItem; let ix = $index) {
+
+                <li class="li-container" [ngClass]="{
+                    'low-priority':taskItem.priority === 1,
+                    'medium-priority':taskItem.priority === 2,
+                    'high-priority':taskItem.priority === 3
+                }"
+                >
+                
+                    <div [id]="taskItem.id"
+                    class="li-task-content">
+                    
+                        <p [title]="((task.isRemovable && !taskItem.isCompleted) ? 'Double click to edit' : '')" class="content-task-item"
+                        #taskItemContent [ngClass]="{
+                            'isCompleted':taskItem.isCompleted
+                        }"
+                        ><span>Task #{{ix + 1}}:</span> {{taskItem.content}}</p>
+                    
+                    </div>
+                    
+                </li>
+
+                }
+
+                </ul>
+            </div>
+            }
+
+        </div>
+        
+    }
+    
+</div>
+
+<div class="retrospective-form-container" *ngIf="showForm" [@fadeInOut]>
+
+    <form [formGroup]="retrospectiveForm" (submit)="onSubmit()">
+
+        <h1>
+            <span *ngIf="!isSpanish">How was the previous sprint?</span>
+            <span *ngIf="isSpanish">¿Cómo estuvo el Sprint anterior?</span>
+        </h1>
+        
+        <div class="stars" (mouseleave)="hoverRating(0)">
+            <button type="button" (click)="setRating(1)" (mouseover)="hoverRating(1)"><i [ngClass]="{
+                'star-bg': ratingHover >= 1 || getRating() >= 1
+            }" class="fa-solid fa-star"></i></button>
+            <button type="button" (click)="setRating(2)" (mouseover)="hoverRating(2)"><i [ngClass]="{
+                'star-bg': ratingHover >= 2 || getRating() >= 2
+            }" class="fa-solid fa-star"></i></button>
+            <button type="button" (click)="setRating(3)" (mouseover)="hoverRating(3)"><i [ngClass]="{
+                'star-bg': ratingHover >= 3 || getRating() >= 3
+            }" class="fa-solid fa-star"></i></button>
+            <button type="button" (click)="setRating(4)" (mouseover)="hoverRating(4)"><i [ngClass]="{
+                'star-bg': ratingHover >= 4 || getRating() >= 4
+
+            }" class="fa-solid fa-star"></i></button>
+            <button type="button" (click)="setRating(5)" (mouseover)="hoverRating(5)"><i [ngClass]="{
+                'star-bg': ratingHover >= 5 || getRating() >= 5
+            }" class="fa-solid fa-star"></i></button>
+            <p>({{getRating()}})</p>
+        </div>
+
+        <button type="button" class="button-style delete-rating-button" (click)="deleteRating()">
+            <span *ngIf="!isSpanish">Delete rating</span>
+            <span *ngIf="isSpanish">Eliminar rating</span>
+        </button>
+
+        <div class="feedback-content">
+            <label for="feedback">
+                <span *ngIf="!isSpanish">Your feedback about previous sprint.</span>
+                <span *ngIf="isSpanish">Tu opinión sobre el Sprint pasado.</span>
+            </label>
+            <textarea id="feedback" formControlName="feedBack" placeholder="Your opinion"></textarea>
+        </div>
+
+        <button type="submit" class="button-style">Submit</button>
+
+    </form>
+
+    <button type="button" class="close-form-button" (click)="onCloseForm()">
+        <i class="fa-solid fa-x"></i>
+    </button>
+
+</div>
+
+<div class="focus-form" *ngIf="showForm"></div>

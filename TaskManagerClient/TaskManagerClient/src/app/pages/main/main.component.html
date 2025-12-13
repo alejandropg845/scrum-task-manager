@@ -1,0 +1,73 @@
+
+
+<div *ngIf="userService.expirationTime" class="expiration-time-container">
+    <div class="expiration-time">
+        <span class="spinning-clock"></span>
+        <p>{{userService.expirationTime | date:'medium' }}</p>
+    </div>
+    <div class="remaining-time">
+        <p>
+            <span *ngIf="!isSpanish">Remaining: </span>
+            <span *ngIf="isSpanish">Restante: </span>
+            {{ sprintService.remainingTime }}
+        </p>
+    </div>
+</div>
+
+<app-sprints></app-sprints>
+
+
+<div class="gemini-window-container" *ngIf="isAssistantOpen" [@jump]>
+
+    <div class="gemini-window-content">
+
+        <div class="gemini-responses-container">
+
+            @for (message of chatMessages; track $index) {
+                <div [ngClass]="{
+                    'gemini-response-container':!message.isUserMessage, 
+                    'user-response-container':message.isUserMessage
+                    }">
+
+                    <img *ngIf="!message.isUserMessage" src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg" alt="assistant image">
+
+                    <div [ngClass]="{
+                        'response-content':!message.isUserMessage, 
+                        'user-response':message.isUserMessage}">
+
+                        <p>{{ message.isUserMessage ? 'You' : 'Assistant' }}</p>
+                        <p [innerHTML]="message.content" [ngClass]="{
+                            'assistant-response':!message.isUserMessage,
+                            'user-response':message.isUserMessage
+                        }"></p>
+                        <i *ngIf="!message.content && !message.isUserMessage" class="fa-solid fa-spinner fa-spin"></i>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <div class="send-message-container">
+            <input #message (keydown.enter)="sendMessage(message)" type="text" placeholder="Send message">
+            <button (click)="sendMessage(message)">
+                <span *ngIf="!isSpanish">Submit</span>
+                <span *ngIf="isSpanish">Enviar</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<app-my-tasks (openAssistantEventEmitter)="openAssistant($event)"></app-my-tasks>
+
+<div class="focus-assistant-chat" (click)="closeAssistantWindow()" *ngIf="isAssistantOpen"></div>
+
+
+<button class="language-switcher" title="Change language" (click)="switchLanguage()">
+    <i class="fa-solid fa-repeat"></i>
+    <div>
+        <img *ngIf="!isSpanish" src="./assets/flags/uk.jpg" alt="uk flag">
+        <img *ngIf="isSpanish" src="./assets/flags/spain.jpg" alt="spain flag">
+    </div>
+</button>
+
+

@@ -1,0 +1,281 @@
+
+
+
+<div class="tasks-container" #tasks_container> <!--tasks Container-->
+
+    <h1 class="sprint-name" *ngIf="userService.isScrum && userService.status === 'begun'">
+        <span *ngIf="sprintService.sprintName" >{{sprintService.sprintName}} <span>(Sprint # {{sprintService.sprintNumber}})</span></span>
+        <span *ngIf="!sprintService.sprintName">Sprint # {{sprintService.sprintNumber}}</span>
+    </h1>
+    
+
+    @for (task of tasks; track task; let i = $index) {
+
+        <div class="task-container" 
+        @fadeInOut 
+        [ngClass]="{
+            'glow-effect':task.status === 'in progress' && task.sprintStatus !== 'finished',
+            'task-high-priority': task.priority === 3 && userService.isScrum,
+            'task-medium-priority': task.priority === 2 && userService.isScrum,
+            'task-low-priority' : task.priority === 1 && userService.isScrum,
+            'task-none-priority': task.priority === 0 && userService.isScrum
+        }">
+            
+            <!--Boton eliminar task cuando está loggeado-->
+            <i *ngIf="userService.username && canDeleteTask(task.isRemovable) && !task.sprintId" class="fa-regular fa-trash-can deleteUserTaskIcon" (click)="deleteTask(task.id)"></i>
+
+            <!--Boton eliminar task cuando no está loggeado-->
+            <i *ngIf="!userService.username" class="fa-regular fa-trash-can deleteUserTaskIcon" (click)="deleteTaskLocalStorage(task.id)"></i>
+
+            <!-- Task header -->
+            <div class="header-task-info">
+        
+                <!-- Checkbox para seleccionar la tarea para el sprint -->
+                <input *ngIf="!task.status && userService.isScrum && userService.isGroupOwner" 
+                type="checkbox" 
+                title="Include this task to sprint"
+                #elementCheckbox
+                (change)="addTaskToSprint(task, elementCheckbox)">
+
+                <!-- Aviso de sprint en scrum -->
+                <p *ngIf="task.status === 'in progress' && task.sprintStatus !== 'finished'" class="task-expiration">
+                    <span class="spinning-clock"></span>
+                    <span *ngIf="!isSpanish">Sprint in progress</span>
+                    <span *ngIf="isSpanish">Sprint en progreso</span>
+                </p>
+
+                <!-- Aviso de tarea completada -->
+                <p *ngIf="task.status === 'completed'" class="task-completed"><i class="fa fa-solid fa-check"></i>
+                    <span *ngIf="!isSpanish">Completed</span>
+                    <span *ngIf="isSpanish">Completado</span>
+                </p>
+
+                <!-- Aviso de tarea NO completada -->
+                <p *ngIf="task.sprintStatus === 'finished' && task.status === 'in progress'" class="task-expiration not-completed">
+                    <span *ngIf="!isSpanish">Not completed</span>
+                    <span *ngIf="isSpanish">No completado</span>
+                </p>
+                
+                <p>
+                    <span *ngIf="!isSpanish">
+                        Created on <span>{{task.createdOn | date}}</span><span *ngIf="task.username"> by {{task.username | titlecase}}</span>
+                    </span>
+                    <span *ngIf="isSpanish">
+                        Creado en <span>{{task.createdOn | date}}</span><span *ngIf="task.username"> por {{task.username | titlecase}}</span>
+                    </span>
+                </p>
+
+                <div class="task-priorities" *ngIf="userService.groupName && userService.isScrum">
+                    <button (click)="setTaskPriority(task.id, 1)">
+                        <span *ngIf="!isSpanish">L</span>
+                        <span *ngIf="isSpanish">B</span>
+                    </button>
+                    <button (click)="setTaskPriority(task.id, 2)">M</button>
+                    <button (click)="setTaskPriority(task.id, 3)">
+                        <span *ngIf="!isSpanish">H</span>
+                        <span *ngIf="isSpanish">A</span>
+                    </button>
+                </div>
+
+            </div>
+
+            
+            <!--Task body-->
+            <p class="task-title">{{task.title}}</p>
+
+            <!-- Listado de subtareas -->
+            <ul class="ul-container" #ulContainer>
+                
+                @for (taskItem of task.taskItems; track taskItem; let ix = $index) {
+
+                <li class="li-container" [ngClass]="{
+                    'low-priority':taskItem.priority === 1,
+                    'medium-priority':taskItem.priority === 2,
+                    'high-priority':taskItem.priority === 3
+                }">
+                
+                    <div [id]="taskItem.id"
+                    class="li-task-content"
+                    (click)="togglePhoneActionButtons(taskItem, task)">
+                    
+                        <p [title]="((task.isRemovable && !taskItem.isCompleted) ? 'Double click to edit' : '')" class="content-task-item"
+                        (dblclick)="((task.isRemovable && !taskItem.isCompleted) ? openEditTaskItemInterface(taskItem, task): null)"
+                        #taskItemContent [ngClass]="{
+                            'isCompleted':taskItem.isCompleted
+                        }"
+                        >
+                            <span *ngIf="!isSpanish">Task #{{ix + 1}}: </span> 
+                            <span *ngIf="isSpanish">Tarea #{{ix + 1}}: </span>
+                            {{taskItem.content}}
+                        </p>
+                    
+                    </div>
+                    <!-- Botones de subtarea -->
+                    <div #action_buttons class="task-item-action-buttons">
+                        <div>
+                            <!-- Nombre de usuario al que se le asignó la subtarea-->
+                            <p class="assigned-to-task-item" *ngIf="userService.groupName"><span>{{taskItem.assignToUsername}}</span></p>
+                            <!-- Boton de borrado de subtarea solo para cuando está loggeado-->
+                            <i title="Delete" *ngIf="userService.username && taskItem.isRemovable && task.status !== 'in progress'"
+                            class="fa fa-regular fa-trash"
+                            (click)="deleteTaskItem(taskItem)"></i>
+                            <!-- Boton de borrado de subtarea solo para cuando no tiene cuenta -->
+                            <i title="Delete" *ngIf="!userService.username"
+                            class="fa fa-regular fa-trash"
+                            (click)="deleteTaskItemLocalStorage(taskItem.taskId, taskItem.id)"></i>
+                            <!-- Marcar como completada la subtarea cuando el usuario está loggeado -->
+                            <i title="Mark as completed" *ngIf="taskItem.isCompletable && !taskItem.isCompleted && userService.username"
+                            class="fa-solid fa-check"
+                            (click)="markTaskItemAsCompleted(taskItem, task.username, task.sprintId)"></i>
+                            <!-- Marcar como completada la subtarea cuando el usuario no está loggeado -->
+                            <i title="Mark as completed" *ngIf="!userService.username"
+                            class="fa-solid fa-check"
+                            (click)="setAsCompletedTaskItemLocalStorage(taskItem)"></i>
+                            <!-- Botón para abrir asistente -->
+                            <i title="Open AI assistant" *ngIf="userService.groupName && taskItem.isCompletable"
+                            class="fa-solid fa-wand-magic-sparkles"
+                            (click)="openAssistant(taskItem.content)"></i>
+                            <!-- Icono de ojo para ver todo el contenido -->
+                            <i title="See all content" class="fa-regular fa-eye" *ngIf="isTruncated(taskItemContent)" (click)="openTaskItemContent(taskItemContent)"></i>
+                        </div>
+                        <!-- Marcar prioridad de subtarea cuando se encuentra loggeado -->
+                        <div class="priorities-container" *ngIf="userService.username">
+                            <p (click)="onSetTaskItemPriority(taskItem.taskId, taskItem.id, 1)">
+                                <span class="show-task-short-priority" *ngIf="!isSpanish">L</span>
+                                <span class="show-task-complete-priority" *ngIf="!isSpanish">Low</span>
+                                <span class="show-task-short-priority" *ngIf="isSpanish">B</span>
+                                <span class="show-task-complete-priority" *ngIf="isSpanish">Baja</span>
+                            </p>
+                            <p (click)="onSetTaskItemPriority(taskItem.taskId, taskItem.id, 2)">
+                                <span class="show-task-short-priority">M</span>
+                                <span class="show-task-complete-priority" *ngIf="!isSpanish">Medium</span>
+                                <span class="show-task-complete-priority" *ngIf="isSpanish">Media</span>
+                            </p>
+                            <p (click)="onSetTaskItemPriority(taskItem.taskId, taskItem.id, 3)">
+                                <span class="show-task-short-priority" *ngIf="!isSpanish">H</span>
+                                <span class="show-task-complete-priority" *ngIf="!isSpanish">High</span>
+                                <span class="show-task-short-priority" *ngIf="isSpanish">A</span>
+                                <span class="show-task-complete-priority" *ngIf="isSpanish">Alta</span>
+                            </p>
+                        </div>
+                        <!-- Marcar prioridad de subtarea cuando no se encuentra loggeado -->
+                        <div class="priorities-container" *ngIf="!userService.username">
+                            <p (click)="onSetTaskItemPriorityLS(taskItem.taskId, taskItem.id, 1)">
+                                <span *ngIf="!isSpanish">Low</span>
+                                <span *ngIf="isSpanish">Baja</span>
+                            </p>
+                            <p (click)="onSetTaskItemPriorityLS(taskItem.taskId, taskItem.id, 2)">
+                                <span *ngIf="!isSpanish">Medium</span>
+                                <span *ngIf="isSpanish">Media</span>
+                            </p>
+                            <p (click)="onSetTaskItemPriorityLS(taskItem.taskId, taskItem.id, 3)">
+                                <span *ngIf="!isSpanish">High</span>
+                                <span *ngIf="isSpanish">Alta</span>
+                            </p>
+                        </div>
+                    </div>
+                </li>
+
+                }
+
+                <!--Mostramos únicamente la interfaz de agregar taskItem si es removable ya que si es removalbe etnonces la tarea me pertenece-->
+                <div *ngIf="task.isRemovable" class="add-taskItem-container">
+
+                    <div class="add-taskItem-content">
+                        
+                        <!--Para cuando hay group y ES scrum el grupo-->
+                        <input #taskItemContent id="{{task.id}}" *ngIf="userService.username && userService.isScrum && !task.sprintId" maxlength="300" #content type="text" [placeholder]="isSpanish ? 'Título de subtarea':'Task title'" 
+                        (keydown.enter)="addTaskItem(task.id, task.title, task.sprintId, ulContainer)">
+
+                        <!-- Para cuando hay group y NO ES scrum-->
+                        <input #taskItemContent id="{{task.id}}" *ngIf="userService.groupName && !userService.isScrum" maxlength="300" #content type="text" [placeholder]="isSpanish ? 'Título de subtarea' : 'Task title'" 
+                        (keydown.enter)="addTaskItem(task.id, task.title, task.sprintId, ulContainer)">
+
+                        <!-- Para cuando hay username pero no hay grupo-->
+                        <input #taskItemContent id="{{task.id}}" *ngIf="userService.username && !userService.groupName" maxlength="300" #content type="text" [placeholder]="isSpanish ? 'Título de subtarea' : 'Task title'" 
+                        (keydown.enter)="addTaskItem(task.id, task.title, task.sprintId, ulContainer)">
+                        
+                        <!--Para cuando no hay cuenta-->
+                        <input #taskItemContent id="{{task.id}}" *ngIf="!userService.username" maxlength="300" #content type="text" [placeholder]="isSpanish ? 'Título de subtarea' : 'Task title'" 
+                        (keydown.enter)="addTaskItemLocalStorage(task.id)">
+
+                        <!-- Para cuando es scrum, ya que se deben ocultar ciertas cosas cuando se inicie un sprint-->
+                        <select id="{{task.id}}" *ngIf="userService.groupName && userService.isScrum && !task.sprintId" #assignedTo>
+                            <option value="">
+                                <span *ngIf="!isSpanish">Assign to</span>
+                                <span *ngIf="isSpanish">Asignar a</span>
+                            </option>
+                            @for (user of usersInGroup; track $index) {
+                                <option [value]="user.username">{{user.username}}</option>
+                            }
+                        </select>
+
+                        <!-- Para cuando haya grupo sin Scrum-->
+                        <select id="{{task.id}}" *ngIf="userService.groupName && !userService.isScrum" #assignedTo>
+                            <option value="">
+                                <span *ngIf="!isSpanish">Assign to</span>
+                                <span *ngIf="isSpanish">Asignar a</span>
+                            </option>
+                            @for (user of usersInGroup; track $index) {
+                                <option [value]="user.username">{{user.username}}</option>
+                            }
+                        </select>
+                        
+                    </div>
+                    
+                <!-- Boton "+" para agregar subtarea para cuando se encuentra loggeado--> 
+                    <i *ngIf="userService.username && !task.sprintId" class="fa fa-regular fa-plus add-task-item-icon" 
+                    (click)="addTaskItem(task.id, task.title, task.sprintId, ulContainer)"></i>
+
+                <!-- Boton "+" para agregar subtarea para cuando NO se encuentra loggeado--> 
+                <i *ngIf="!userService.username" class="fa fa-regular fa-plus add-task-item-icon" 
+                (click)="addTaskItemLocalStorage(task.id)"></i>
+                </div>
+            </ul>
+
+            <div class="edit-taskItem" *ngIf="task.taskItemEdit">
+
+                <h4>
+                    <span *ngIf="!isSpanish">Edit task item</span>
+                    <span *ngIf="isSpanish">Editar subtarea</span>
+                </h4>
+
+                <textarea maxlength="300" #taskItemNewContent>{{task.taskItemEdit.content}}</textarea>
+                <div class="edit-taskItem-assignment" *ngIf="userService.groupName">
+                    <p>
+                        <span *ngIf="!isSpanish">Change assigned user</span>
+                        <span *ngIf="isSpanish">Cambiar asignado</span>
+                    </p>
+                    <!--Agregamos taskId para luego buscar el valor de select en el QueryList 
+                    por medio del taskId y obtener el valor del select-->
+                    <select #selectvalue [id]="task.id">
+                        <option [value]="task.taskItemEdit.assignToUsername">{{task.taskItemEdit.assignToUsername}}</option>
+                        @for (user of usersInGroup; track $index) {
+                            <option *ngIf="user.username !== task.taskItemEdit.assignToUsername" 
+                            [value]="user.username">{{user.username}}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="edit-taskItem-buttons" [@fadeInOut]>
+                    <button class="button-style cancel-button" 
+                    (click)="closeEditTaskItemInterface(task.id)"
+                    >
+                        <span *ngIf="!isSpanish">Cancel</span>
+                        <span *ngIf="isSpanish">Cancelar</span>
+                    </button>
+                    <button class="button-style" style="color: white;" 
+                    (click)="updateTaskItem(taskItemNewContent.value, task.id, task.taskItemEdit.id)"
+                    >
+                        <span *ngIf="!isSpanish">Done</span>
+                        <span *ngIf="isSpanish">Hecho</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        
+    }
+</div>

@@ -1,0 +1,35 @@
+<div class="add-task-container">
+
+    <h3 *ngIf="!isSpanish">Add task section</h3>
+    <h3 *ngIf="isSpanish">Sección de Agregar Tarea</h3>
+
+    <div class="add-task-content">
+
+        <div class="login-input-container">
+            <label for="task-title">
+                <span *ngIf="!isSpanish">Task title</span>
+                <span *ngIf="isSpanish">Título de tarea</span>
+            </label>
+            <input autocomplete="off" type="text" #input_title id="task-title" [placeholder]="!isSpanish?'Task title':'Título de tarea'" maxlength="90">
+        </div>
+
+    </div>
+    
+    <!-- Botón para cuando el usuario se encuentra loggeado y con grupo -->
+    <button class="button-style color-white" (click)="addTask(input_title)" *ngIf="userService.username && userService.groupName">
+        <span *ngIf="!isSpanish">Done</span>
+        <span *ngIf="isSpanish">Hecho</span>
+    </button>
+
+    <!-- Botón para cuando el usuario se encuentra loggeado y sin grupo -->
+    <button class="button-style color-white" (click)="addTask(input_title)" *ngIf="userService.username && !userService.groupName">
+        <span *ngIf="!isSpanish">Done</span>
+        <span *ngIf="isSpanish">Hecho</span>
+    </button>
+
+    <!-- Botón para cuando el usuario no se encuentra loggeado -->
+    <button class="button-style color-white" (click)="addTaskLS(input_title)" *ngIf="!userService.username">
+        <span *ngIf="!isSpanish">Done</span>
+        <span *ngIf="isSpanish">Hecho</span>
+    </button>
+</div>
