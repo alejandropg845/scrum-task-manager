@@ -1,0 +1,89 @@
+<div class="retrospective-container container">
+
+    <h3>
+        <span *ngIf="!isSpanish">Sprints retrospectives</span>
+        <span *ngIf="isSpanish">Retrospectivas de Sprints</span>
+    </h3>
+
+    <div class="retrospective-filtering" *ngIf="retrospectives.length > 0">
+         
+        <div class="filter-content">
+            <label for="sprintNumber">
+                <span *ngIf="!isSpanish">Filter by sprint</span>
+                <span *ngIf="isSpanish">Por sprint</span>
+            </label>
+            <select id="sprintNumber" #selectValue (change)="filterBy(selectValue.value)">
+                <option value="0">
+                    <span *ngIf="!isSpanish">None</span>
+                    <span *ngIf="isSpanish">Ninguno</span>
+                </option>
+                @for (sprintNumber of sprintsNumbers; track $index) {
+                    <option value={{sprintNumber}}>{{sprintNumber}}</option>
+                }
+            </select>
+        </div>
+
+        <div class="filter-content">
+            <label for="rating">
+                <span *ngIf="!isSpanish">Order by rating</span>
+                <span *ngIf="isSpanish">Por rating</span>
+            </label>
+            <button *ngIf="!isDescending" (click)="orderBy('asc')">
+                <span *ngIf="!isSpanish">Descending</span>
+                <span *ngIf="isSpanish">Descendente</span>
+            </button>
+            <button *ngIf="isDescending" (click)="orderBy('desc')">
+                <span *ngIf="!isSpanish">Ascending</span>
+                <span *ngIf="isSpanish">Ascendente</span>
+            </button>
+        </div>
+
+    </div>
+
+    <p class="no-data-found" *ngIf="retrosCopy.length === 0 || retrospectives.length === 0">
+        <span *ngIf="!isSpanish">No retrospectives found...</span>
+        <span *ngIf="isSpanish">No hay retrospectivas...</span>
+    </p>
+
+    <div class="retrospectives">
+
+        @for (retro of retrosCopy; track $index) {
+
+            <div class="retrospective">
+
+                <h4>{{retro.name}}</h4>
+
+                <div class="retrospective-content">
+
+                    <div class="stars-rating">
+
+                        <button><i class="fa-solid fa-star" [ngClass]="{
+                            'star-bg': retro.rating >= 1
+                        }"></i></button>
+                        <button><i class="fa-solid fa-star" [ngClass]="{
+                            'star-bg': retro.rating >= 2
+                        }"></i></button>
+                        <button><i class="fa-solid fa-star" [ngClass]="{
+                            'star-bg': retro.rating >= 3
+                        }"></i></button>
+                        <button><i class="fa-solid fa-star" [ngClass]="{
+                            'star-bg': retro.rating >= 4
+                        }"></i></button>
+                        <button><i class="fa-solid fa-star" [ngClass]="{
+                            'star-bg': retro.rating >= 5
+                        }"></i></button>
+
+                    </div>
+
+                    <p class="retrospective-feedback-p">{{retro.feedback}}</p>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+

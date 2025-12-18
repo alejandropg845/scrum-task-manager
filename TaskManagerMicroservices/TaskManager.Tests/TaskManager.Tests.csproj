@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TaskManager.Common\TaskManager.Common.csproj" />
+    <ProjectReference Include="..\TaskManager.GroupsRoles\TaskManager.GroupsRoles.csproj" />
+    <ProjectReference Include="..\TaskManager.Sprints\TaskManager.Sprints.csproj" />
+    <ProjectReference Include="..\TaskManager.TaskItems\TaskManager.TaskItems.csproj" />
+    <ProjectReference Include="..\TaskManager.Tasks\TaskManager.Tasks.csproj" />
+    <ProjectReference Include="..\TaskManager.Users\TaskManager.Users.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

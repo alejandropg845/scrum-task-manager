@@ -1,0 +1,39 @@
+<div class="assigned-tasks-container">
+
+    <h3>
+        <span *ngIf="!isSpanish">My assigned tasks</span>
+        <span *ngIf="isSpanish">Mis tareas asignadas</span>
+    </h3>
+
+    <p class="x" *ngIf="assignedTasks.length === 0">
+        <span *ngIf="!isSpanish">No assigned tasks for now</span>
+        <span *ngIf="isSpanish">No hay tareas asignadas</span>
+    </p>
+    <div class="assigned-tasks-content">
+
+        @for (taskItem of assignedTasks; track $index) {
+            <div class="assigned-task-container" [ngClass]="{
+                'bg-gray-priority': taskItem.priority === 1,
+                'bg-orange-priority': taskItem.priority === 2,
+                'bg-red-priority': taskItem.priority === 3,
+            }">
+
+                <h4>{{taskItem.taskTitle}}</h4>
+                
+                <p>{{taskItem.content}}</p>
+
+                <div class="assigned-task-button-container">
+
+                    <button *ngIf="!taskItem.isCompleted" 
+                    (click)="markTaskItemAsCompleted(taskItem)">
+                        <span *ngIf="!isSpanish">Complete</span>
+                        <span *ngIf="isSpanish">Completar</span>
+                    </button>
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

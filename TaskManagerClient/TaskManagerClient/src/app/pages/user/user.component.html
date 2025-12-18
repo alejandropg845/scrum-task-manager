@@ -1,0 +1,23 @@
+<section class="user-info-container">
+
+    <h3>
+        <span *ngIf="!isSpanish">User information</span>
+        <span *ngIf="isSpanish">Información del usuario</span>
+    </h3>
+
+    <div class="user-info-content">
+
+        <i class="fa-solid fa-circle-user"></i>
+        
+        <p><span *ngIf="!isSpanish">Username:</span><span *ngIf="isSpanish">Usuario:</span> <span>{{userService.username}}</span></p>
+
+        <p *ngIf="userService.isScrum && userService.groupRole"><span *ngIf="!isSpanish">Group role:</span><span *ngIf="isSpanish">Rol de grupo:</span> <span>{{userService.groupRole}}</span></p>
+
+    </div>
+
+    <button (click)="logOut()">
+        <span *ngIf="!isSpanish">Log out</span>
+        <span *ngIf="isSpanish">Cerrar sesión</span>
+    </button>
+
+</section>

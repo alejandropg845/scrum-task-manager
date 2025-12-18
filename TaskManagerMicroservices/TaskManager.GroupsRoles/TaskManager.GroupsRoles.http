@@ -1,0 +1,6 @@
+@TaskManager.GroupsRoles_HostAddress = http://localhost:5221
+
+GET {{TaskManager.GroupsRoles_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

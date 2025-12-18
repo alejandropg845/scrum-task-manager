@@ -1,0 +1,51 @@
+<section class="login-container" *ngIf="!forgotPassword">
+
+    <h3>
+        <span *ngIf="!isSpanish">Login</span>
+        <span *ngIf="isSpanish">Iniciar sesión</span>
+    </h3>
+
+    <form class="login-content" [formGroup]="form">
+
+        <div class="login-input-container">
+            <label for="username">
+                <span *ngIf="!isSpanish">Username</span>
+                <span *ngIf="isSpanish">Usuario</span>
+            </label>
+            <input autocomplete="off" type="text" id="username" [placeholder]="!isSpanish ? 'Username' : 'Usuario'" formControlName="username">
+        </div>
+
+        <div class="login-input-container">
+            <label for="password">
+                <span *ngIf="!isSpanish">Password</span>
+                <span *ngIf="isSpanish">Contraseña</span>
+            </label>
+            <div class="password-container">
+                <input [type]="(showPassword?'text':'password')" id="password" [placeholder]="!isSpanish ? 'Password' : 'Contraseña'" formControlName="password">
+                <i (click)="showPassword = !showPassword" class="fa-solid fa-eye" *ngIf="!showPassword"></i>
+                <i (click)="showPassword = !showPassword" class="fa-solid fa-eye-slash" *ngIf="showPassword"></i>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="change-authentication-container">
+        <p class="change-authentication" (click)="taskService.showLogin = false">
+            <span *ngIf="!isSpanish">Register instead</span>
+            <span *ngIf="isSpanish">Registrarse</span>
+        </p>
+        <p class="change-authentication" (click)="forgotPassword = true">
+            <span *ngIf="!isSpanish">Forgot your password?</span>
+            <span *ngIf="isSpanish">Olvidaste tu contraseña?</span>
+        </p>
+    </div>
+
+    <button (click)="onSubmit()">
+        <span *ngIf="!isSpanish">Submit</span>
+        <span *ngIf="isSpanish">Hecho</span>
+        <i class="loading-icon" *ngIf="isLogging"></i>
+    </button>
+
+</section>
+
+<app-forgot-password *ngIf="forgotPassword" (backToLoginEventEmitter)="backToLogin()"></app-forgot-password>
