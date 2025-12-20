@@ -146,51 +146,60 @@ MessagesDate "1" *-- "*" Message : groups
 # Secciones
 
 ## Sección de Grupo basada en Roles
-### Dependiendo de su rol, cada usuario tiene opciones específicas disponibles dentro de la sección de grupo:
+Dependiendo de su rol, cada usuario tiene opciones específicas disponibles dentro de la sección de grupo:
+
 ![Interfaces basadas en roles](readme-assets/interfaces.png)
 
 ## Sección Agregar Tarea (Backlog)
-### Los usuarios pueden agregar tareas al Backlog para ser realizadas durante un Sprint.
+Los usuarios pueden agregar tareas al Backlog para ser realizadas durante un Sprint.
 
 ## Mis Tareas Asignadas
-### Los usuarios pueden ver una lista de tareas pendientes o asignadas a ellos en el grupo actual.
+Los usuarios pueden ver una lista de tareas pendientes o asignadas a ellos en el grupo actual.
 
 ## Chat de Grupo
-### Los usuarios del grupo pueden enviar mensajes para facilitar la comunicación. Los mensajes se organizan por el día en que fueron enviados.
+Los usuarios del grupo pueden enviar mensajes para facilitar la comunicación. Los mensajes se organizan por el día en que fueron enviados.
 
 ## Información de Usuario
-### Los usuarios pueden ver su rol dentro del grupo y su nombre de usuario.
+Los usuarios pueden ver su rol dentro del grupo y su nombre de usuario.
 
 ## Retrospectivas
-### Se envía una Retrospectiva con respecto al Sprint completado.
+Se envía una Retrospectiva con respecto al Sprint completado.
+
 ![Secciones](readme-assets/sections.png)
 
 ## Preparación del Sprint Backlog
-### Aquí se preparan los Backlogs del Sprint que se ejecutarán durante un Sprint.
+Aquí se preparan los Backlogs del Sprint que se ejecutarán durante un Sprint.
+
 ![Backlogs de Sprint](readme-assets/sprints_backlogs_interface.png)
 
 ## Sprint Activo
-### Cuando comienza un Sprint, se resalta visualmente y se agrega un temporizador de cuenta regresiva que muestra el tiempo restante.
+Cuando comienza un Sprint, se resalta visualmente y se agrega un temporizador de cuenta regresiva que muestra el tiempo restante.
+
 ![Sprint iniciado](readme-assets/sprint_started.png)
 
 ## Asistente Gemini API
-### Los usuarios pueden usar el Asistente de IA para ayudarles a completar sus tareas asignadas.
+Los usuarios pueden usar el Asistente de IA para ayudarles a completar sus tareas asignadas.
+
 ![Gemini API](readme-assets/gemini_api.gif)
 
 ## Ordenamiento del Sprint Backlog
-### Los Backlogs se pueden ordenar según su prioridad.
+Los Backlogs se pueden ordenar según su prioridad.
+
 ![Ordenamiento de Backlog](readme-assets/backlog_sorting.gif)
 
 ## Retrospectiva del Sprint
-### Justo cuando finaliza un Sprint, los Desarrolladores y el Scrum Master pueden evaluar cómo se llevó a cabo el Sprint.
+Justo cuando finaliza un Sprint, los Desarrolladores y el Scrum Master pueden evaluar cómo se llevó a cabo el Sprint.
+
 ![Retrospectiva](readme-assets/retrospective1.gif)
 
 ## Historial de Sprints
-### Se puede ver un historial de Sprints, detallando las tareas completadas y no completadas (Backlogs).
+Se puede ver un historial de Sprints, detallando las tareas completadas y no completadas (Backlogs).
+
 ![Historial de Sprints](readme-assets/sprints_history.gif)
 
 ## Descargar Historial de Sprints como PDF
-### Está disponible un botón para descargar el informe del historial de Sprints.
+Está disponible un botón para descargar el informe del historial de Sprints.
+
 ![Sprints pdf](readme-assets/sprints_pdf.gif)
 
 
