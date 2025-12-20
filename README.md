@@ -144,51 +144,60 @@ classDiagram
 # Sections
 
 ## User-role-based Group Section
-### Depending on their role, each user has specific options available within the group section:
+Depending on their role, each user has specific options available within the group section:
+
 ![User-role-based interfaces](readme-assets/interfaces.png)
 
 ## Add Task (Backlog) Section
-### Users can add Backlog tasks to be carried out during a Sprint.
+Users can add Backlog tasks to be carried out during a Sprint.
 
 ## My Assigned Tasks
-### Users can view a list of pending tasks or tasks assigned to them in the current group.
+Users can view a list of pending tasks or tasks assigned to them in the current group.
 
 ## Group Chat
-### Users in the group can send messages to facilitate communication. Messages are organized by the day they were sent.
+Users in the group can send messages to facilitate communication. Messages are organized by the day they were sent.
 
 ## User Information
-### Users can view their role within the group and their username.
+Users can view their role within the group and their username.
 
 ## Retrospectives
-### A Retrospective is submitted regarding the completed Sprint.
+A Retrospective is submitted regarding the completed Sprint.
+
 ![sections](readme-assets/sections.png)
 
 ## Sprint Backlog Preparation
-### The Sprint Backlogs to be executed during a Sprint are prepared here.
+The Sprint Backlogs to be executed during a Sprint are prepared here.
+
 ![Sprints backlogs](readme-assets/sprints_backlogs_interface.png)
 
 ## Active Sprint
-### When a Sprint starts, it is visually highlighted, and a countdown timer showing the remaining time is added.
+When a Sprint starts, it is visually highlighted, and a countdown timer showing the remaining time is added.
+
 ![Sprint started](readme-assets/sprint_started.png)
 
 ## Gemini API Assistant
-### Users can use the AI Assistant to help them complete their assigned tasks.
+Users can use the AI Assistant to help them complete their assigned tasks.
+
 ![Gemini API](readme-assets/gemini_api.gif)
 
 ## Sprint Backlog Sorting
-### Backlogs can be sorted according to their priority.
+Backlogs can be sorted according to their priority.
+
 ![Backlog sorting](readme-assets/backlog_sorting.gif)
 
 ## Sprint Retrospective
-### Just once a Sprint finishes, Developers and the Scrum Master can evaluate how the Sprint was carried out.
+Just once a Sprint finishes, Developers and the Scrum Master can evaluate how the Sprint was carried out.
+
 ![Retrospective](readme-assets/retrospective1.gif)
 
 ## Sprints History
-### A history of Sprints can be viewed, detailing completed and uncompleted tasks (Backlogs).
+A history of Sprints can be viewed, detailing completed and uncompleted tasks (Backlogs).
+
 ![Sprints history](readme-assets/sprints_history.gif)
 
 ## Download Sprints History as PDF
-### A button to download the Sprint history report is available.
+A button to download the Sprint history report is available.
+
 ![Sprints pdf](readme-assets/sprints_pdf.gif)
 
 
@@ -212,7 +221,7 @@ To test specific external features, you must update the values in the `.env` fil
 ## Deployment strategy
 
 ### Microservices (Development & Docker)
-In local development and Docker environments, the system runs as a fully distributed microservices architecture. Each service (Identity, Tasks, Gateway, etc.) operates in its own container, communicating via RabbitMQ and HTTP, replicating a production-grade enterprise environment.
+In local development and Docker environments, the system runs as a fully distributed microservices architecture. Each service (Identity, Tasks, Gateway, etc.) operates in its own container, communicating via RabbitMQ and HTTP.
 
 ### Monolithic adaptation (Azure production)
 For the live production demo on Azure, to adhere to the resource quotas of the `Azure Free Tier (F1)` (CPU/RAM limits), the services were consolidated into a single deployment unit (Monolith).
