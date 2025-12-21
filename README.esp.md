@@ -15,6 +15,8 @@
 ![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-0078D4?style=for-the-badge&logo=azure-pipelines&logoColor=white)
+![xUnit](https://img.shields.io/badge/xUnit-Framework_de_pruebas-448811?style=for-the-badge&logo=xunit&logoColor=white)
+![FluentAssertions](https://img.shields.io/badge/FluentAssertions-Aserciones-0050C5?style=for-the-badge&logo=fluentassertions&logoColor=white)
 
 Gestor de tareas colaborativo aplicado a la metodología SCRUM.
 
@@ -25,6 +27,8 @@ Gestor de tareas colaborativo aplicado a la metodología SCRUM.
 *   **Datos:** MongoDB.
 *   **Integración IA:** API de Gemini para asistencia inteligente en la organización de tareas.
 *   **DevOps:** Azure DevOps, Docker.
+*   **Testing:** Pruebas unitarias implementadas con xUnit y FluentAssertions para casos de prueba robustos y legibles.
+
 
 # Arquitectura y secciones de usuario
 
