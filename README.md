@@ -12,9 +12,12 @@
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
 ![SignalR](https://img.shields.io/badge/SignalR-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![Polly](https://img.shields.io/badge/Polly-EF2D5E?style=for-the-badge&logo=nuget&logoColor=white)
+![xUnit](https://img.shields.io/badge/xUnit-Test_Framework-448811?style=for-the-badge&logo=xunit&logoColor=white)
+![FluentAssertions](https://img.shields.io/badge/FluentAssertions-Assertions-0050C5?style=for-the-badge&logo=fluentassertions&logoColor=white)
 ![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-0078D4?style=for-the-badge&logo=azure-pipelines&logoColor=white)
+
 
 Collaborative task manager applied to the SCRUM methodology.
 
@@ -25,6 +28,8 @@ Collaborative task manager applied to the SCRUM methodology.
 *   **Data:** MongoDB.
 *   **AI Integration:** Gemini API for intelligent task organization assistance.
 *   **DevOps:** Azure DevOps, Docker.
+*   **Testing:** Unit tests implemented with xUnit and FluentAssertions for robust and readable test cases.
+
 
 # Architecture and user sections
 
